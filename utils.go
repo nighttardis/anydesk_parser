@@ -41,7 +41,7 @@ type LogEntry struct {
 func (le *LogEntry) parseFunction(ads *AnydeskSession) {
 	switch le.FunctionName {
 	case "anynet.any_socket":
-		if strings.HasPrefix(strings.TrimSpace(le.Message), "Accept request from") {
+		if strings.HasPrefix(le.Message, "Accept request from") {
 			tmp := regexp.MustCompile(`Accept\srequest\sfrom\s(?P<userid>\d+)\s\(via\s(?P<connectionmethod>[^\)]+)\)\.`)
 			match := tmp.FindStringSubmatch(le.Message)
 			fmt.Println("Found New Connection")
