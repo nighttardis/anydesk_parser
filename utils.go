@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -98,4 +99,9 @@ func (le *LogEntry) parseFunction(ads *AnydeskSession) {
 			ads.Version = match[1] // version
 		}
 	}
+}
+
+func (ads *AnydeskSession) printSession() {
+	body, _ := json.Marshal(ads)
+	fmt.Println(string(body))
 }

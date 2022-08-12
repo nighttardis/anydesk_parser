@@ -55,8 +55,7 @@ func main() {
 		}
 
 		if ads.SessionEnd {
-			body, _ := json.Marshal(ads)
-			fmt.Println(string(body))
+			ads.printSession()
 			if !ads.SessionStart {
 				fmt.Println("[+] WARNING Found session need before finding a session begin.")
 				fmt.Println("[+] WARNING This could be because of rolled logs or parsing errors.")
@@ -64,6 +63,11 @@ func main() {
 			ads = AnydeskSession{}
 		}
 
+	}
+	if ads.SessionStart && !ads.SessionEnd {
+		fmt.Println("[+] WARNING Found Session start but didn't find the end of the session before finish reading hte file.")
+		fmt.Println("[+] WARNING This could be because of on going connection when pulling the logs or parsing errors.")
+		ads.printSession()
 	}
 
 }
