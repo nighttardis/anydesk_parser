@@ -46,9 +46,8 @@ func main() {
 			ads.LogEntries = append(ads.LogEntries, leS)
 		}
 
-		fmt.Println(ads)
-
 		if ads.SessionEnd {
+			fmt.Println(ads)
 			ads = AnydeskSession{}
 		}
 
