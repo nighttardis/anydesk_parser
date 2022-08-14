@@ -14,7 +14,7 @@ func main() {
 	logreg := `^\s+(?P<loglevel>[^\s]+)\s(?P<datetime>[\d-]+\s[\d:\.]+)\s+(?P<appname>\w+)\s+(?P<threadname>[a-z][^\s]+)?\s+(?P<pid>\d+)\s+(?P<threadid>\d+)\s+(?P<fiberid>\d+)?\s+(?P<functionname>[^\s]+)\s+-(?P<message>.+)`
 	logre := regexp.MustCompile(logreg)
 
-	file, err := os.Open("data/test_data")
+	file, err := os.Open("data/ad.trace_windows_user_approval")
 
 	if err != nil {
 		fmt.Println(err)
@@ -55,7 +55,14 @@ func main() {
 		}
 
 		if ads.SessionEnd {
-			ads.printSession()
+			if len(ads.FileTransfer) > 0 {
+				fmt.Printf("[+] INFO File transfer occured in Session: %d\n", ads.SessionId)
+			}
+			if len(ads.TextCopied) > 0 {
+				fmt.Printf("[+] INFO Text coping occured in Session: %d\n", ads.SessionId)
+			}
+			// ads.printSession()
+			ads.saveSession()
 			if !ads.SessionStart {
 				fmt.Println("[+] WARNING Found session need before finding a session begin.")
 				fmt.Println("[+] WARNING This could be because of rolled logs or parsing errors.")
@@ -67,6 +74,12 @@ func main() {
 	if ads.SessionStart && !ads.SessionEnd {
 		fmt.Println("[+] WARNING Found Session start but didn't find the end of the session before finish reading hte file.")
 		fmt.Println("[+] WARNING This could be because of on going connection when pulling the logs or parsing errors.")
+		if len(ads.FileTransfer) > 0 {
+			fmt.Printf("[+] INFO File transfer occured in Session: %d\n", ads.SessionId)
+		}
+		if len(ads.TextCopied) > 0 {
+			fmt.Printf("[+] INFO Text coping occured in Session: %d\n", ads.SessionId)
+		}
 		ads.printSession()
 	}
 
