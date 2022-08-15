@@ -144,7 +144,7 @@ func (ads *AnydeskSession) printSession() {
 	fmt.Println(string(body))
 }
 
-func (ads *AnydeskSession) saveSession() {
+func (ads *AnydeskSession) saveSession(outputDir string) {
 	f, _ := json.MarshalIndent(ads, "", "    ")
-	_ = os.WriteFile("data/test.json", f, 0644)
+	_ = os.WriteFile(outputDir+"/ad_session_"+strconv.Itoa(ads.SessionId)+".json", f, 0644)
 }
